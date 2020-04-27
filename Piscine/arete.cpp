@@ -13,9 +13,9 @@ Arete::Arete(double& id, double& num1, double& num2, double& poids)
 Arete::~Arete()
 {}
 
-void Arete::afficherAreteSvg(Svgfile* svgout) const
+/*void Arete::afficherAreteSvg(Svgfile* svgout) const
 {
     for(size_t i=0; i<)
 
     svgout->addLine();
-}
+}*/

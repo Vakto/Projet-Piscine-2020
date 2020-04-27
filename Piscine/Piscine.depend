@@ -66,3 +66,17 @@
 	<iostream>
 	<sstream>
 
+1588013305 source:c:\users\alice cbx\documents\projet piscine\projet-piscine-2020\piscine\arete.cpp
+	"Arete.h"
+	<fstream>
+	<iostream>
+
+1588012759 c:\users\alice cbx\documents\projet piscine\projet-piscine-2020\piscine\arete.h
+	<fstream>
+	"svgfile.h"
+
+1588012759 c:\users\alice cbx\documents\projet piscine\projet-piscine-2020\piscine\svgfile.h
+	<string>
+	<fstream>
+	<set>
+

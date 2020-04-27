@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <queue>
 
 Graphe::Graphe(std::string nomFichiertopo,std::string nomFichierpond)              //constructeur
 {
@@ -112,6 +113,103 @@ void Graphe::afficher() const                   //fonction d'affichage du fichie
     }
 }
 
+std::vector<int> Graphe::rechercheDijkstra(double num_F)   //algorithme de DIJKSTRA
+    {
+
+        auto cmp = [](std::pair<const Sommet*,double> p1, std::pair<const Sommet*,double> p2)
+        {
+            return p2.second<p1.second;
+        };
+
+        /// déclaration de la file de priorité
+        std::priority_queue<std::pair<const Sommet*,double>,std::vector<std::pair<const Sommet*,double>>,decltype(cmp)> file(cmp);
+
+        /// pour le marquage
+        std::vector<int> couleurs((int)m_sommets.size(),0);
+
+        ///pour noter les prédécesseurs : on note les numéros des prédécesseurs (on pourrait stocker des pointeurs sur ...)
+        std::vector<int> preds((int)m_sommets.size(),-1);
+
+        ///pour la distance
+        std::vector<int> poids((int)m_sommets.size(),-1);
+
+
+        ///initialisation
+        poids[num_F]=0;
+        file.push({m_sommets[num_F],0});
+
+        std::pair<const Sommet*,double> p;
+
+        while(!file.empty())
+        {
+            ///on marque le sommet s avec le plus petit poids
+            p = file.top();
+            file.pop();
+
+            ///pour chaque successeur du sommet défilé
+            while((!file.empty())&&(couleurs[p.first->getID()] ==1))
+            {
+                p=file.top();
+                file.pop();
+            }
+            couleurs[p.first->getID()]=1;          //on marque le sommet
+
+            for(auto succ : p.first->getSuccesseurs())          //pour chaque successeur
+            {
+                if(couleurs[succ.first->getID()] == 0) ///si non marqué
+                {
+                    if( (poids[p.first->getID()] + succ.second < poids[succ.first->getID()]) || (poids[succ.first->getID()] == -1) ) ///si distance inférieur
+                    {
+                        poids[succ.first->getID()] = poids[p.first->getID()] + succ.second;       //on met à jour les distances
+                        preds[succ.first->getID()] = p.first->getID();                            //on note le prédecesseur
+                        file.push({succ.first,poids[succ.first->getID()]});                        //on ajoute la pair dans la file
+                    }
+                }
+            }
+        }
+        return preds;
+    }
+
+
+/*
+sous-programme qui affiche une arborescence
+params : sommet initial (racine), vecteur de prédécesseur
+*/
+
+void Graphe::afficher_parcours(double num1, double num2, const std::vector<int>& arbre)
+{
+
+            if(arbre[num2]!=-1)
+            {
+                std::cout<<num2<<" <-- ";
+                size_t j=arbre[num2];
+
+                while(j!=num1)
+                {
+                        std::cout<<j<<" <-- ";
+                        j=arbre[j];
+                }
+                std::cout<<j<<std::endl;
+
+                size_t a=num2;
+                int somme=0;
+
+                while(a!=num1)
+                {
+                        for(auto succ: m_sommets[arbre[a]]->getSuccesseurs())
+                            {
+                                if(succ.first->getID()==a)
+                                {
+                                        std::cout << succ.second << " + ";
+                                        somme = somme + succ.second;
+                                }
+                            }
+                            a=arbre[a];
+                }
+                std::cout << "somme : " << somme;
+            }
+}
+/*
 void Graphe::afficherGrapheSvg(Svgfile* svgout) const
 {
     for(size_t i=0; i<m_sommets.size(); ++i)
@@ -123,4 +221,4 @@ void Graphe::afficherGrapheSvg(Svgfile* svgout) const
     {
         m_aretes[i]->afficherAreteSvg(svgout);
     }
-}
+    }*/

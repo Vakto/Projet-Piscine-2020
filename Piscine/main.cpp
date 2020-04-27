@@ -31,7 +31,7 @@ void menu()
     switch(choix1)
     {
     case 1:
-        {
+    {
         std::cout << "Vous souhaitez charger un graphe\n"
                   "Veuillez choisir le nom du fichier (topologie) en .txt" << std::endl;
         std::cin >> nom;
@@ -61,11 +61,25 @@ void menu()
         g.afficher();
         g.afficherGrapheSvg(&svgout);
         }
-        break;
+    }
+    break;
 
     case 2:
-        std::cout << "2_OK" << std::endl;
-        break;
+    {
+        double id1,id2;
+        Graphe g;
+        std::cout << std::endl << "Identifiant sommet de depart :";             //on demande le sommet de d�part
+        std::cin >> id1;
+        std::cout << std::endl << "Identifiant sommet d'arrivee :";             //on demande le sommet d'arriv�e
+        std::cin >> id2;
+        std::vector<int> arbre = g.rechercheDijkstra(id1);
+
+        ///affichage du plus court chemin
+        std::cout << std::endl << "parcours a partir du sommet " << id1 << " jusqu'au sommet " << id2 << std::endl;
+        g.afficher_parcours(id1,id2,arbre);
+    }
+
+    break;
 
     case 3:
         std::cout << "3_OK" << std::endl;
