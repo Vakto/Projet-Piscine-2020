@@ -60,7 +60,6 @@ void menu()
         Svgfile svgout;
         g.afficher();
         g.afficherGrapheSvg(&svgout);
-        }
     }
     break;
 
@@ -68,9 +67,9 @@ void menu()
     {
         double id1,id2;
         Graphe g;
-        std::cout << std::endl << "Identifiant sommet de depart :";             //on demande le sommet de dï¿½part
+        std::cout << std::endl << "Identifiant sommet de depart :";             //on demande le sommet de départ
         std::cin >> id1;
-        std::cout << std::endl << "Identifiant sommet d'arrivee :";             //on demande le sommet d'arrivï¿½e
+        std::cout << std::endl << "Identifiant sommet d'arrivee :";             //on demande le sommet d'arrivée
         std::cin >> id2;
         std::vector<int> arbre = g.rechercheDijkstra(id1);
 
