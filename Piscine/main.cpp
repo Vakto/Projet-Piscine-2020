@@ -1,5 +1,7 @@
 #include <iostream>
 #include "Graphe.h"
+#include "Svgfile.h"
+#include <string>
 
 void menu()
 {
@@ -55,7 +57,9 @@ void menu()
             nom2 = "vide";
 
         Graphe g{nom,nom2};     //ouverture du fichier
+        Svgfile svgout;
         g.afficher();
+        g.afficherGrapheSvg(&svgout);
         }
         break;
 

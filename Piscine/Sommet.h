@@ -2,13 +2,14 @@
 #define SOMMET_H_INCLUDED
 #include <vector>
 #include <fstream>
+#include "svgfile.h"
 
 class Sommet
 {
 private:
     double m_id,m_x,m_y;
     char m_nom;
-    std::vector<const Sommet*> m_successeurs;           //vecteur de successeurs
+    std::vector<std::pair<const Sommet*,double>> m_successeurs;           //vecteur de successeurs
 
 
 public:
@@ -17,13 +18,19 @@ public:
 
     ~Sommet();
 
+    double getID() const
+    {
+        return m_id;
+    }
+
     ///accesseur : pour la liste des successeurs
-    const std::vector<const Sommet*>& getSuccesseurs() const;
+    const std::vector<std::pair<const Sommet*,double>>& getSuccesseurs() const;
 
-    void ajouterSucc(const Sommet* voisin);             //fonction d'ajout de successeur
+    void ajouterSucc(std::pair<const Sommet*,double> voisin);   //fonction d'ajout de successeur
 
-    void afficherVoisins();                             //fonction d'affichage de successeurs
+    void afficherVoisins() const;                               //fonction d'affichage de successeurs
 
+    void afficherSommetSvg(Svgfile* svgout) const;
 };
 
 #endif // SOMMET_H_INCLUDED

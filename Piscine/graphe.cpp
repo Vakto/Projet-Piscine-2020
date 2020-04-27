@@ -12,57 +12,78 @@ Graphe::Graphe(std::string nomFichiertopo,std::string nomFichierpond)           
 
 
 
-        ifs >> m_orient;                            //lecture de l'orientation
-        if ( ifs.fail() )
-            std::cout << "pb de lecture orientation\n";
+    ifs >> m_orient;                            //lecture de l'orientation
+    if ( ifs.fail() )
+        std::cout << "pb de lecture orientation\n";
 
-        double ordre;
-        ifs >> ordre;                               //lecture ordre
-        if ( ifs.fail() )
-            std::cout << "pb de lecture ordre\n";
+    double ordre;
+    ifs >> ordre;                               //lecture ordre
+    if ( ifs.fail() )
+        std::cout << "pb de lecture ordre\n";
 
-        for(int i=0; i<ordre; ++i)
-        {
-            m_sommets.push_back( new Sommet{ifs} );
-        }
-
-        double taille;
-        ifs >> taille;                              //lecture de la taille(nombre d'arêtes)
-        if ( ifs.fail() )
-            std::cout<<"pb de lecture taille\n";
-
-        double num1,num2,id;
-        std::string ligne;
-
-        for (int i=0; i<taille; ++i)
-        {
-            ifs >> id >> num1 >> num2;                          //lecture des ID des arêtes
-
-            m_aretes.push_back( new Arete(id,num1,num2) );
-
-            m_sommets[num1]->ajouterSucc(m_sommets[num2]);      //création du successeur de sommet
-
-            ///si le graphe n'est pas orienté
-            ///si num2 est successeur de num1, num1 est successeur de num2
-            if(!m_orient)
-                m_sommets[num2]->ajouterSucc(m_sommets[num1]);
-        }
-
-    if(nomFichierpond != "vide")
+    for(int i=0; i<ordre; ++i)
     {
-        std::ifstream ifs2{nomFichiertopo};              //lecture du fichier
-        if (!ifs2)
-            std::cout << "pb d'ouverture ou nom du fichier\n";
+        m_sommets.push_back( new Sommet{ifs} );
+    }
 
-        double taille;
-        ifs2 >> taille;                              //lecture de la taille(nombre d'arêtes)
-        if ( ifs.fail() )
-            std::cout << "pb de lecture taille\n";
+    double taille;
+    ifs >> taille;                              //lecture de la taille(nombre d'arêtes)
+    if ( ifs.fail() )
+        std::cout<<"pb de lecture taille\n";
 
-        double poids;
-        for (int i=0; i<taille; ++i)
+    double num1,num2,idT,idP;
+    std::string ligne;
+
+    for (int i=0; i<taille; ++i)
+    {
+        ifs >> idT >> num1 >> num2;                          //lecture des ID des arêtes
+
+        if(nomFichierpond != "vide")                        //si ouverture d'une ponderation
         {
-            ifs2 >> id >> poids;                 //lecture des ID des arêtes et du poids de chacune
+            std::ifstream ifs2{nomFichierpond};              //lecture du fichier
+            if (!ifs2)
+                std::cout << "pb d'ouverture ou nom du fichier ponderation\n";
+
+            double taille2;
+            ifs2 >> taille2;                              //lecture de la taille(nombre d'arêtes)
+            if ( ifs.fail() )
+                std::cout << "pb de lecture taille\n";
+
+            if(taille != taille2)
+            {
+                std::cout << "Probleme au niveau du nombre d'arete, pas la meme taille\n";
+            }
+
+            double poids;
+            for (int i=0; i<taille; ++i)
+            {
+                ifs2 >> idP >> poids;                 //lecture des ID des arêtes et du poids de chacune
+
+                if(idT == idP)                      //si mm arete
+                {
+                    m_aretes.push_back( new Arete(idT,num1,num2,poids) );
+
+                    m_sommets[num1]->ajouterSucc(std::make_pair(m_sommets[num2],poids));        //ajout d'un successeur avec son poids
+
+                    ///si le graphe n'est pas orienté
+                    ///si num2 est successeur de num1, num1 est successeur de num2
+                    if(!m_orient)
+                        m_sommets[num2]->ajouterSucc(std::make_pair(m_sommets[num1],poids));
+                }
+            }
+        }
+        else
+        {
+            double poids = 0;
+
+            m_aretes.push_back( new Arete(idT,num1,num2,poids) );
+
+                    m_sommets[num1]->ajouterSucc(std::make_pair(m_sommets[num2],poids));        //ajout d'un successeur avec son poids
+
+                    ///si le graphe n'est pas orienté
+                    ///si num2 est successeur de num1, num1 est successeur de num2
+                    if(!m_orient)
+                        m_sommets[num2]->ajouterSucc(std::make_pair(m_sommets[num1],poids));
         }
     }
 }
@@ -74,19 +95,32 @@ Graphe::~Graphe()       //destructeur
 }
 
 void Graphe::afficher() const                   //fonction d'affichage du fichier
+{
+    if(m_orient == 0)
+        std::cout << "Graphe non oriente\n";
+    else
+        std::cout << "Graphe oriente\n";
+
+
+    std::cout << "Ordre : " << m_sommets.size() << std::endl;
+    std::cout << "Liste sommets " << std::endl;
+
+    for(const auto s : m_sommets)
     {
-        if(m_orient == 0)
-            std::cout << "Graphe non oriente\n";
-        else
-            std::cout << "Graphe oriente\n";
-
-
-        std::cout << "Ordre : " << m_sommets.size() << std::endl;
-        std::cout << "Liste sommets " << std::endl;
-
-        for(const auto s : m_sommets)
-        {
-            s->afficherVoisins();                   //appelle du sspg pour afficher les successeurs à un sommet
-            std::cout << std::endl;
-        }
+        s->afficherVoisins();                   //appelle du sspg pour afficher les successeurs à un sommet
+        std::cout << std::endl;
     }
+}
+
+void Graphe::afficherGrapheSvg(Svgfile* svgout) const
+{
+    for(size_t i=0; i<m_sommets.size(); ++i)
+    {
+        m_sommets[i]->afficherSommetSvg(svgout);
+    }
+
+    for(size_t i=0; i<m_aretes.size(); ++i)
+    {
+        m_aretes[i]->afficherAreteSvg(svgout);
+    }
+}

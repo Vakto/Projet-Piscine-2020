@@ -3,6 +3,7 @@
 #include <vector>
 #include "Sommet.h"
 #include "Arete.h"
+#include "svgfile.h"
 
 
 class Graphe
@@ -18,6 +19,7 @@ public:
     ~Graphe();
 
     void afficher() const;
+    void afficherGrapheSvg(Svgfile* svgout) const;
 };
 
 
