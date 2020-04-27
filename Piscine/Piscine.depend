@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1587983000 source:c:\users\grego\documents\github\projet-piscine\piscine\sommet.cpp
+	"Sommet.h"
+	<vector>
+	<iostream>
+	<fstream>
+
+1587983000 c:\users\grego\documents\github\projet-piscine\piscine\sommet.h
+	<vector>
+	<fstream>
+
+1587983623 source:c:\users\grego\documents\github\projet-piscine\piscine\arete.cpp
+	"Arete.h"
+	<fstream>
+	<iostream>
+
+1587983052 c:\users\grego\documents\github\projet-piscine\piscine\arete.h
+	<fstream>
+
