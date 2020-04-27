@@ -11,28 +11,23 @@ Sommet::Sommet(std::ifstream& is)
 
     }
 
-Sommet::~Sommet()
+Sommet::~Sommet()               //destructeur
     {}
 
-///accesseur : pour la liste des successeurs
+    ///accesseur : pour la liste des successeurs
     const std::vector<const Sommet*>& Sommet::getSuccesseurs() const
     {
         return m_successeurs;
     }
 
-    void Sommet::ajouterSucc1(const Sommet* voisin)          //on ajoute un sucesseur
+    void Sommet::ajouterSucc(const Sommet* voisin)          //on ajoute un sucesseur
     {
         m_successeurs.push_back(voisin);
     }
 
-///accesseur : pour la liste des successeurs
-const std::vector<std::pair<const Sommet*,double>>& Sommet::getSuccesseurs() const
+    void Sommet::afficherVoisins()                          //on affiche les succeseurs
     {
-        return m_successeurs;
+        std::cout << "sommet " << m_id << " : " ;
+        for(const auto s : m_successeurs)
+            std::cout << " " << s->m_id;
     }
-
-void Sommet::ajouterSucc(std::pair<const Sommet*,double> voisin)
-    {
-        m_successeurs.push_back(voisin);
-    }
-

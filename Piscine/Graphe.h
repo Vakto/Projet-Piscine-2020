@@ -17,7 +17,6 @@ public:
 
     ~Graphe();
 
-    void menu() const;
     void afficher() const;
 };
 

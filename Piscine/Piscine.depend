@@ -17,3 +17,32 @@
 1587983052 c:\users\grego\documents\github\projet-piscine\piscine\arete.h
 	<fstream>
 
+1587983623 source:c:\users\grego\documents\github\projet-piscine-2020\piscine\arete.cpp
+	"Arete.h"
+	<fstream>
+	<iostream>
+
+1587983052 c:\users\grego\documents\github\projet-piscine-2020\piscine\arete.h
+	<fstream>
+
+1587985415 source:c:\users\grego\documents\github\projet-piscine-2020\piscine\graphe.cpp
+	"Graphe.h"
+	<iostream>
+	<fstream>
+	<vector>
+
+1587985415 c:\users\grego\documents\github\projet-piscine-2020\piscine\graphe.h
+	<vector>
+	"Sommet.h"
+	"Arete.h"
+
+1587985211 c:\users\grego\documents\github\projet-piscine-2020\piscine\sommet.h
+	<vector>
+	<fstream>
+
+1587985467 source:c:\users\grego\documents\github\projet-piscine-2020\piscine\sommet.cpp
+	"Sommet.h"
+	<vector>
+	<iostream>
+	<fstream>
+

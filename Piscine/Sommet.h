@@ -8,7 +8,8 @@ class Sommet
 private:
     double m_id,m_x,m_y;
     char m_nom;
-    std::vector<std::pair<const Sommet*,double>> m_successeurs;
+    std::vector<const Sommet*> m_successeurs;           //vecteur de successeurs
+
 
 public:
 
@@ -16,23 +17,12 @@ public:
 
     ~Sommet();
 
-    int getId() const
-    {
-        return m_id;
-    }
-
-    ///accesseur : pour la liste des successeurs
-    const std::vector<std::pair<const Sommet*,double>>& getSuccesseurs() const;
-
-    void ajouterSucc(std::pair<const Sommet*,double> voisin);
-
-    void afficherVoisins() const;
-
-
     ///accesseur : pour la liste des successeurs
     const std::vector<const Sommet*>& getSuccesseurs() const;
 
-    void ajouterSucc1(const Sommet* voisin);             //fonction d'ajout de successeur
+    void ajouterSucc(const Sommet* voisin);             //fonction d'ajout de successeur
+
+    void afficherVoisins();                             //fonction d'affichage de successeurs
 
 };
 
