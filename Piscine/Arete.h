@@ -8,7 +8,7 @@ private:
     double m_id, m_num1, m_num2, m_poids;
 
 public:
-    Arete(std::ifstream& iss);
+    Arete(double& id, double& num1, double& num2);
 
     ~Arete();
 };

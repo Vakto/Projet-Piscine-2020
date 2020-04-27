@@ -8,7 +8,6 @@ Sommet::Sommet(std::ifstream& is)
         is >> m_id >> m_nom >> m_x >> m_y;
         if ( is.fail() )
                 std::cout << "Probleme lecture sommet\n";
-
     }
 
 Sommet::~Sommet()               //destructeur

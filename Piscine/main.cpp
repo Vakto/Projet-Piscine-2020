@@ -10,6 +10,7 @@ void menu()
               "4. Tester la vulnerabilite" << std::endl;
 
     std::cout << std::endl << "Choisissez une option !" << std::endl;
+
     int choix1;
     std::string choix2;
 
@@ -28,6 +29,7 @@ void menu()
     switch(choix1)
     {
     case 1:
+        {
         std::cout << "Vous souhaitez charger un graphe\n"
                   "Veuillez choisir le nom du fichier (topologie) en .txt" << std::endl;
         std::cin >> nom;
@@ -53,7 +55,8 @@ void menu()
             nom2 = "vide";
 
         Graphe g{nom,nom2};     //ouverture du fichier
-
+        g.afficher();
+        }
         break;
 
     case 2:
