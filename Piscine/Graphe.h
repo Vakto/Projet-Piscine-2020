@@ -25,6 +25,9 @@ public:
 
     std::vector <int> rechercheDijkstra (double num_F);
     void afficher_parcours(double num1, double num2, const std::vector<int>& arbre);
+    //Bfs
+     std::vector<int> BFS(int num_s0)const;
+
 };
 
 

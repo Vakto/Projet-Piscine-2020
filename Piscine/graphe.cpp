@@ -79,12 +79,12 @@ Graphe::Graphe(std::string nomFichiertopo,std::string nomFichierpond)           
 
             m_aretes.push_back( new Arete(idT,num1,num2,poids) );
 
-                    m_sommets[num1]->ajouterSucc(std::make_pair(m_sommets[num2],poids));        //ajout d'un successeur avec son poids
+            m_sommets[num1]->ajouterSucc(std::make_pair(m_sommets[num2],poids));        //ajout d'un successeur avec son poids
 
-                    ///si le graphe n'est pas orienté
-                    ///si num2 est successeur de num1, num1 est successeur de num2
-                    if(!m_orient)
-                        m_sommets[num2]->ajouterSucc(std::make_pair(m_sommets[num1],poids));
+            ///si le graphe n'est pas orienté
+            ///si num2 est successeur de num1, num1 est successeur de num2
+            if(!m_orient)
+                m_sommets[num2]->ajouterSucc(std::make_pair(m_sommets[num1],poids));
         }
     }
 }
@@ -114,61 +114,61 @@ void Graphe::afficher() const                   //fonction d'affichage du fichie
 }
 
 std::vector<int> Graphe::rechercheDijkstra(double num_F)   //algorithme de DIJKSTRA
+{
+
+    auto cmp = [](std::pair<const Sommet*,double> p1, std::pair<const Sommet*,double> p2)
     {
+        return p2.second<p1.second;
+    };
 
-        auto cmp = [](std::pair<const Sommet*,double> p1, std::pair<const Sommet*,double> p2)
+    /// déclaration de la file de priorité
+    std::priority_queue<std::pair<const Sommet*,double>,std::vector<std::pair<const Sommet*,double>>,decltype(cmp)> file(cmp);
+
+    /// pour le marquage
+    std::vector<int> couleurs((int)m_sommets.size(),0);
+
+    ///pour noter les prédécesseurs : on note les numéros des prédécesseurs (on pourrait stocker des pointeurs sur ...)
+    std::vector<int> preds((int)m_sommets.size(),-1);
+
+    ///pour la distance
+    std::vector<int> poids((int)m_sommets.size(),-1);
+
+
+    ///initialisation
+    poids[num_F]=0;
+    file.push({m_sommets[num_F],0});
+
+    std::pair<const Sommet*,double> p;
+
+    while(!file.empty())
+    {
+        ///on marque le sommet s avec le plus petit poids
+        p = file.top();
+        file.pop();
+
+        ///pour chaque successeur du sommet défilé
+        while((!file.empty())&&(couleurs[p.first->getID()] ==1))
         {
-            return p2.second<p1.second;
-        };
-
-        /// déclaration de la file de priorité
-        std::priority_queue<std::pair<const Sommet*,double>,std::vector<std::pair<const Sommet*,double>>,decltype(cmp)> file(cmp);
-
-        /// pour le marquage
-        std::vector<int> couleurs((int)m_sommets.size(),0);
-
-        ///pour noter les prédécesseurs : on note les numéros des prédécesseurs (on pourrait stocker des pointeurs sur ...)
-        std::vector<int> preds((int)m_sommets.size(),-1);
-
-        ///pour la distance
-        std::vector<int> poids((int)m_sommets.size(),-1);
-
-
-        ///initialisation
-        poids[num_F]=0;
-        file.push({m_sommets[num_F],0});
-
-        std::pair<const Sommet*,double> p;
-
-        while(!file.empty())
-        {
-            ///on marque le sommet s avec le plus petit poids
-            p = file.top();
+            p=file.top();
             file.pop();
+        }
+        couleurs[p.first->getID()]=1;          //on marque le sommet
 
-            ///pour chaque successeur du sommet défilé
-            while((!file.empty())&&(couleurs[p.first->getID()] ==1))
+        for(auto succ : p.first->getSuccesseurs())          //pour chaque successeur
+        {
+            if(couleurs[succ.first->getID()] == 0) ///si non marqué
             {
-                p=file.top();
-                file.pop();
-            }
-            couleurs[p.first->getID()]=1;          //on marque le sommet
-
-            for(auto succ : p.first->getSuccesseurs())          //pour chaque successeur
-            {
-                if(couleurs[succ.first->getID()] == 0) ///si non marqué
+                if( (poids[p.first->getID()] + succ.second < poids[succ.first->getID()]) || (poids[succ.first->getID()] == -1) ) ///si distance inférieur
                 {
-                    if( (poids[p.first->getID()] + succ.second < poids[succ.first->getID()]) || (poids[succ.first->getID()] == -1) ) ///si distance inférieur
-                    {
-                        poids[succ.first->getID()] = poids[p.first->getID()] + succ.second;       //on met à jour les distances
-                        preds[succ.first->getID()] = p.first->getID();                            //on note le prédecesseur
-                        file.push({succ.first,poids[succ.first->getID()]});                        //on ajoute la pair dans la file
-                    }
+                    poids[succ.first->getID()] = poids[p.first->getID()] + succ.second;       //on met à jour les distances
+                    preds[succ.first->getID()] = p.first->getID();                            //on note le prédecesseur
+                    file.push({succ.first,poids[succ.first->getID()]});                        //on ajoute la pair dans la file
                 }
             }
         }
-        return preds;
     }
+    return preds;
+}
 
 
 /*
@@ -179,36 +179,85 @@ params : sommet initial (racine), vecteur de prédécesseur
 void Graphe::afficher_parcours(double num1, double num2, const std::vector<int>& arbre)
 {
 
-            if(arbre[num2]!=-1)
+    if(arbre[num2]!=-1)
+    {
+        std::cout<<num2<<" <-- ";
+        size_t j=arbre[num2];
+
+        while(j!=num1)
+        {
+            std::cout<<j<<" <-- ";
+            j=arbre[j];
+        }
+        std::cout<<j<<std::endl;
+
+        size_t a=num2;
+        int somme=0;
+
+        while(a!=num1)
+        {
+            for(auto succ: m_sommets[arbre[a]]->getSuccesseurs())
             {
-                std::cout<<num2<<" <-- ";
-                size_t j=arbre[num2];
-
-                while(j!=num1)
+                if(succ.first->getID()==a)
                 {
-                        std::cout<<j<<" <-- ";
-                        j=arbre[j];
+                    std::cout << succ.second << " + ";
+                    somme = somme + succ.second;
                 }
-                std::cout<<j<<std::endl;
-
-                size_t a=num2;
-                int somme=0;
-
-                while(a!=num1)
-                {
-                        for(auto succ: m_sommets[arbre[a]]->getSuccesseurs())
-                            {
-                                if(succ.first->getID()==a)
-                                {
-                                        std::cout << succ.second << " + ";
-                                        somme = somme + succ.second;
-                                }
-                            }
-                            a=arbre[a];
-                }
-                std::cout << "somme : " << somme;
             }
+            a=arbre[a];
+        }
+        std::cout << "somme : " << somme;
+    }
 }
+//Bfs
+//non pondere
+///DEBUT CODE MADAME PALASI ***********************************
+/*
+parcours BFS
+entrée = le numéro du sommet initial (on pourrait passer un pointeur sur ...)
+retour : le tableau de prédecesseurs (pour retrouver les chemins)
+*/
+std::vector<int> Graphe::BFS(int num_s0)const
+{
+    /// déclaration de la file
+    std::queue<const Sommet*> file;
+
+    /// pour le marquage
+    std::vector<int> couleurs((int)m_sommets.size(),0);
+
+    ///pour noter les prédécesseurs : on note les numéros des prédécesseurs (on pourrait stocker des pointeurs sur ...)
+    std::vector<int> preds((int)m_sommets.size(),-1);
+
+    ///étape initiale : on enfile et on marque le sommet initial
+    file.push(m_sommets[num_s0]);
+    couleurs[num_s0]=1;
+
+    const Sommet* s;
+
+    ///tant que la file n'est pas vide
+    while(!file.empty())
+    {
+        ///on défile le prochain sommet
+        s = file.front();
+        file.pop();
+
+        ///pour chaque successeur du sommet défilé
+        for(auto succ:s->getSuccesseurs())
+        {
+            if( couleurs[succ.first->getID()] == 0 )         ///s'il n'est pas marqué
+            {
+                couleurs[succ.first->getID()] = 1;           ///on le marque
+                preds[succ.first->getID()] = s->getID();    ///on note son prédecesseur (=le sommet défilé)
+                file.push(succ.first);                        ///on le met dans la file
+            }
+            couleurs[s->getID()]= 5;                   ///sommet devient noir
+        }
+    }
+    return preds;
+}
+///FIN CODE MADAME PALASI ***********************************
+
+
 /*
 void Graphe::afficherGrapheSvg(Svgfile* svgout) const
 {
