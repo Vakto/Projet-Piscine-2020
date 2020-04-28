@@ -5,8 +5,6 @@
 
 void menu()
 {
-    int t=0;
-
     std::cout << "------- MENU -------" << std::endl;
     std::cout << "Chargement d'un fichier" << std::endl;
     std::cout << std::endl << "1. Charger un graphe\n"
@@ -17,89 +15,89 @@ void menu()
     std::string choix2;
 
     std::string nom,nom2;
+    std::cout << std::endl << "Choisissez une option !" << std::endl;
+    std::cin >> choix1;
 
-    std::cout << "Vous souhaitez charger un graphe\n"
-              "Veuillez choisir le nom du fichier (topologie) en .txt" << std::endl;
-    std::cin >> nom;
-
-    std::cout << "Voulez-vous ouvrir un fichier de ponderation (OUI/NON) ?\n";
-    std::cin >> choix2;
-
-    while((choix2 != "OUI")&&(choix2 != "NON"))
+    while((choix1 > 4)|| (choix1 < 0))
     {
         std::cout << "Ne correspond pas a un choix possible\n"
                   "Veuillez ressaisir votre choix" << std::endl;
 
-        std::cin >> choix2;
-    }
-
-    if(choix2 == "OUI")
-    {
-        std::cout << "Vous souhaitez charger une ponderation\n"
-                  "Veuillez choisir le nom du fichier (ponderation) en .txt" << std::endl;
-        std::cin >> nom2;
-    }
-    else
-        nom2 = "vide";
-
-    Graphe g{nom,nom2};     //ouverture du fichier
-    //Svgfile svgout;
-    g.afficher();
-    //g.afficherGrapheSvg(&svgout);*/
-
-    while(t==0)
-    {
-        std::cout << std::endl << "Choisissez une option !" << std::endl;
         std::cin >> choix1;
+    }
 
-        while((choix1 > 4)|| (choix1 < 0))
+
+
+
+
+
+    switch(choix1)
+    {
+    case 1:
+    {
+        std::cout << "Vous souhaitez charger un graphe\n"
+                  "Veuillez choisir le nom du fichier (topologie) en .txt" << std::endl;
+        std::cin >> nom;
+
+        std::cout << "Voulez-vous ouvrir un fichier de ponderation (OUI/NON) ?\n";
+        std::cin >> choix2;
+
+        while((choix2 != "OUI")&&(choix2 != "NON"))
         {
             std::cout << "Ne correspond pas a un choix possible\n"
                       "Veuillez ressaisir votre choix" << std::endl;
 
-            std::cin >> choix1;
+            std::cin >> choix2;
         }
 
-
-        switch(choix1)
+        if(choix2 == "OUI")
         {
-        case 1:
-        {
-
+            std::cout << "Vous souhaitez charger une ponderation\n"
+                      "Veuillez choisir le nom du fichier (ponderation) en .txt" << std::endl;
+            std::cin >> nom2;
         }
-        break;
+        else
+            nom2 = "vide";
 
-        case 2:
-        {
-            double id1,id2;
-            std::cout << std::endl << "PCC avec dji:";
-            std::cout << std::endl << "Identifiant sommet de depart :";             //on demande le sommet de départ
-            std::cin >> id1;
-            std::cout << std::endl << "Identifiant sommet d'arrivee :";             //on demande le sommet d'arrivée
-            std::cin >> id2;
-            std::vector<int> arbre = g.rechercheDijkstra(id1);
-            g.afficher_parcours(id1,id2,arbre);
+        Graphe g{nom,nom2};     //ouverture du fichier
+        //Svgfile svgout;
+        g.afficher();
+        //g.afficherGrapheSvg(&svgout);*/
 
-            std::cout << std::endl << "PCC avec BFS";
-            ///affichage du plus court chemin
-            std::cout << std::endl << "parcours a partir du sommet " << id1 << " jusqu'au sommet " << id2 << std::endl;
-            g.afficher_parcours(id1,id2,arbre);
-        }
 
-        break;
-
-        case 3:
-            std::cout << "3_OK" << std::endl;
-            break;
-
-        case 4:
-            std::cout << "4_OK" << std::endl;
-            break;
-        default:
-            t=1;
-            break;
-        }
     }
+    break;
+
+    case 2:
+    {
+        double id1,id2;
+        std::cout << std::endl << "PCC avec dji:";
+        std::cout << std::endl << "Identifiant sommet de depart :";             //on demande le sommet de départ
+        std::cin >> id1;
+        std::cout << std::endl << "Identifiant sommet d'arrivee :";             //on demande le sommet d'arrivée
+        std::cin >> id2;
+        std::vector<int> arbre = g.rechercheDijkstra(id1);
+        g.afficher_parcours(id1,id2,arbre);
+
+        std::cout << std::endl << "PCC avec BFS";
+        ///affichage du plus court chemin
+        std::cout << std::endl << "parcours a partir du sommet " << id1 << " jusqu'au sommet " << id2 << std::endl;
+        g.afficher_parcours(id1,id2,arbre);
+    }
+
+    break;
+
+    case 3:
+        std::cout << "3_OK" << std::endl;
+        break;
+
+    case 4:
+        std::cout << "4_OK" << std::endl;
+        break;
+    default:
+        break;
+    }
+}
 }
 
 
