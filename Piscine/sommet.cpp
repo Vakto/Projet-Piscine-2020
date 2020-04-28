@@ -31,12 +31,6 @@ void Sommet::afficherVoisins() const                                    //on aff
             std::cout << " " << s.first->getID();
     }
 
-    // proxi
-
-Sommet::Sommet(int id)
-    {
-        m_id = id;
-    }
 
 /*void Sommet::afficherSommetSvg(Svgfile* svgout) const
 {
