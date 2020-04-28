@@ -14,9 +14,9 @@ private:
     int m_orient;
 
 public:
-    Graphe(std::string nomFichiertopo,std::string nomFichierpond);
+    Graphe(std::string nomFichiertopo,std::string nomFichierpond);      //constructeur
 
-    ~Graphe();
+    ~Graphe();                          //destructeur
 
     void afficher() const;
     void afficherGrapheSvg(Svgfile* svgout) const;

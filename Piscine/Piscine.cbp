@@ -35,10 +35,12 @@
 		<Unit filename="Arete.h" />
 		<Unit filename="Graphe.h" />
 		<Unit filename="Sommet.h" />
+		<Unit filename="Svgfile.h" />
 		<Unit filename="arete.cpp" />
 		<Unit filename="graphe.cpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="sommet.cpp" />
+		<Unit filename="svgfile.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

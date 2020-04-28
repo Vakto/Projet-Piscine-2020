@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 
-Sommet::Sommet(std::ifstream& is)
+Sommet::Sommet(std::ifstream& is)           //constructeur
     {
         is >> m_id >> m_nom >> m_x >> m_y;
         if ( is.fail() )
@@ -31,9 +31,9 @@ void Sommet::afficherVoisins() const                                    //on aff
             std::cout << " " << s.first->getID();
     }
 
-void Sommet::afficherSommetSvg(Svgfile* svgout) const
+void Sommet::afficherSommetSvg(Svgfile* svgout) const           //fonction d'affichage d'un sommet en SVG
 {
-    svgout->addCross(m_x,m_y,0,"green");
-    svgout->addText(m_x,m_y,m_nom,"red");
-}
+    svgout->addDisk(m_x*100,m_y*100,5,"green");
 
+    svgout->addText((m_x*100)-5,(m_y*100)-10,m_nom,"red");
+}

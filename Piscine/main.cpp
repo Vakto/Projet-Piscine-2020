@@ -3,85 +3,110 @@
 #include "Svgfile.h"
 #include <string>
 
-void menu()
+void menu()             //menu
 {
-    std::cout << "------- MENU -------" << std::endl;
-    std::cout << std::endl << "1. Charger un graphe\n"
-              "2. Changer le systeme de ponderation d'un graphe\n"
-              "3. Calculer l'indice de centralite\n"
-              "4. Tester la vulnerabilite" << std::endl;
-
-    std::cout << std::endl << "Choisissez une option !" << std::endl;
-
+    int fin=0;
+    std::string nom = "vide", nom2 = "vide";
     int choix1;
     std::string choix2;
 
-    std::cin >> choix1;
-
-    while((choix1 > 4)|| (choix1 < 0))
+    do
     {
-        std::cout << "Ne correspond pas a un choix possible\n"
-                  "Veuillez ressaisir votre choix" << std::endl;
+        std::cout << std::endl << "------- MENU -------" << std::endl;
+        std::cout << std::endl << "1. Charger un graphe\n"
+                  "2. Changer le systeme de ponderation d'un graphe\n"
+                  "3. Calculer l'indice de centralite\n"
+                  "4. Tester la vulnerabilite\n"
+                  "5. Quitter le menu" << std::endl;
 
-        std::cin >> choix1;
-    }
+        std::cout << std::endl << "Choisissez une option !" << std::endl;               //choix de l'option
 
-    std::string nom,nom2;
+        std::cin >> choix1;                         //récupération du choix utilisateur
 
-    switch(choix1)
-    {
-    case 1:
-        {
-        std::cout << "Vous souhaitez charger un graphe\n"
-                  "Veuillez choisir le nom du fichier (topologie) en .txt" << std::endl;
-        std::cin >> nom;
-
-        std::cout << "Voulez-vous ouvrir un fichier de ponderation (OUI/NON) ?\n";
-        std::cin >> choix2;
-
-        while((choix2 != "OUI")&&(choix2 != "NON"))
+        while((choix1 > 5)|| (choix1 < 0))          //blindage
         {
             std::cout << "Ne correspond pas a un choix possible\n"
                       "Veuillez ressaisir votre choix" << std::endl;
 
-            std::cin >> choix2;
+            std::cin >> choix1;
         }
 
-        if(choix2 == "OUI")
+        if((nom == "vide")&&(nom2 == "vide"))                    //vérification chargement de fichiers
+           {
+                std::cout << "Il n'y a pas de graphe deja charge\n"
+                            "Veuillez en charger un avant toutes actions\n\n"
+                            "Veuillez choisir le nom du fichier (topologie) en .txt " << std::endl;
+
+                std::cin >> nom;
+                Graphe g{nom,nom2};             //ouverture du fichier
+           }
+
+Svgfile svgout;
+
+        switch(choix1)
         {
-            std::cout << "Vous souhaitez charger une ponderation\n"
-                      "Veuillez choisir le nom du fichier (ponderation) en .txt" << std::endl;
-            std::cin >> nom2;
+        case 1:                         //choix 1 : chargement d'une pondération
+        {
+            std::cout << "Voulez-vous ouvrir un fichier de ponderation (OUI/NON) ?\n";
+            std::cin >> choix2;
+
+            while((choix2 != "OUI")&&(choix2 != "NON"))
+            {
+                std::cout << "Ne correspond pas a un choix possible\n"
+                          "Veuillez ressaisir votre choix" << std::endl;
+
+                std::cin >> choix2;
+            }
+
+            if(choix2 == "OUI")
+            {
+                std::cout << "Vous souhaitez charger une ponderation\n"
+                          "Veuillez choisir le nom du fichier (ponderation) en .txt" << std::endl;
+                std::cin >> nom2;
+            }
+            else
+                nom2 = "vide";
+
+            Graphe g{nom,nom2};     //ouverture du fichier
+            g.afficher();
+            g.afficherGrapheSvg(&svgout);
         }
-        else
-            nom2 = "vide";
+        break;
 
-        Graphe g{nom,nom2};     //ouverture du fichier
-        Svgfile svgout;
-        g.afficher();
-        g.afficherGrapheSvg(&svgout);
+        case 2:
+              {
+                std::cout << "Vous souhaitez charger une nouvelle ponderation\n"
+                          "Veuillez choisir le nom du fichier (ponderation) en .txt" << std::endl;
+
+                std::cin >> nom2;
+
+                Graphe p{nom,nom2};
+                p.afficherGrapheSvg(&svgout);
+              }
+            break;
+
+        case 3:
+            std::cout << "3_OK" << std::endl;
+            break;
+
+        case 4:
+            std::cout << "4_OK" << std::endl;
+            break;
+
+        case 5:
+            fin = 1;
+            break;
+
         }
-        break;
-
-    case 2:
-        std::cout << "2_OK" << std::endl;
-        break;
-
-    case 3:
-        std::cout << "3_OK" << std::endl;
-        break;
-
-    case 4:
-        std::cout << "4_OK" << std::endl;
-        break;
     }
+    while(fin != 1);
 }
 
 
 int main()
 {
 
-    menu();
+    menu();         //appel du menu
 
     return 0;
 }

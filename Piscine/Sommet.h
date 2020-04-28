@@ -8,7 +8,7 @@ class Sommet
 {
 private:
     double m_id,m_x,m_y;
-    char m_nom;
+    std::string m_nom;
     std::vector<std::pair<const Sommet*,double>> m_successeurs;           //vecteur de successeurs
 
 
@@ -23,6 +23,16 @@ public:
         return m_id;
     }
 
+    double getX() const
+    {
+        return m_x;
+    }
+
+    double getY() const
+    {
+        return m_y;
+    }
+
     ///accesseur : pour la liste des successeurs
     const std::vector<std::pair<const Sommet*,double>>& getSuccesseurs() const;
 
@@ -30,7 +40,7 @@ public:
 
     void afficherVoisins() const;                               //fonction d'affichage de successeurs
 
-    void afficherSommetSvg(Svgfile* svgout) const;
+    void afficherSommetSvg(Svgfile* svgout) const;              //fonction d'affichage SVG
 };
 
 #endif // SOMMET_H_INCLUDED

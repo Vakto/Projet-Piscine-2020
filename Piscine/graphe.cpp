@@ -11,7 +11,6 @@ Graphe::Graphe(std::string nomFichiertopo,std::string nomFichierpond)           
         std::cout<<"pb d'ouverture ou nom du fichier\n";
 
 
-
     ifs >> m_orient;                            //lecture de l'orientation
     if ( ifs.fail() )
         std::cout << "pb de lecture orientation\n";
@@ -21,9 +20,9 @@ Graphe::Graphe(std::string nomFichiertopo,std::string nomFichierpond)           
     if ( ifs.fail() )
         std::cout << "pb de lecture ordre\n";
 
-    for(int i=0; i<ordre; ++i)
+    for(int i=0; i<ordre; ++i)                  //lecture sommet
     {
-        m_sommets.push_back( new Sommet{ifs} );
+        m_sommets.push_back( new Sommet{ifs} );     //création d'un nouveau sommet
     }
 
     double taille;
@@ -31,7 +30,8 @@ Graphe::Graphe(std::string nomFichiertopo,std::string nomFichierpond)           
     if ( ifs.fail() )
         std::cout<<"pb de lecture taille\n";
 
-    double num1,num2,idT,idP;
+    double idT,idP;
+    int num1,num2;
     std::string ligne;
 
     for (int i=0; i<taille; ++i)
@@ -61,7 +61,7 @@ Graphe::Graphe(std::string nomFichiertopo,std::string nomFichierpond)           
 
                 if(idT == idP)                      //si mm arete
                 {
-                    m_aretes.push_back( new Arete(idT,num1,num2,poids) );
+                    m_aretes.push_back( new Arete(idT,num1,num2,poids) );                       //création d'une nouvelle arête
 
                     m_sommets[num1]->ajouterSucc(std::make_pair(m_sommets[num2],poids));        //ajout d'un successeur avec son poids
 
@@ -97,7 +97,7 @@ Graphe::~Graphe()       //destructeur
 void Graphe::afficher() const                   //fonction d'affichage du fichier
 {
     if(m_orient == 0)
-        std::cout << "Graphe non oriente\n";
+        std::cout << std::endl << "Graphe non oriente\n";
     else
         std::cout << "Graphe oriente\n";
 
@@ -112,15 +112,24 @@ void Graphe::afficher() const                   //fonction d'affichage du fichie
     }
 }
 
-void Graphe::afficherGrapheSvg(Svgfile* svgout) const
+void Graphe::afficherGrapheSvg(Svgfile* svgout) const           //affichage du graphe en SVG
 {
     for(size_t i=0; i<m_sommets.size(); ++i)
     {
         m_sommets[i]->afficherSommetSvg(svgout);
     }
 
+double x1,x2,y1,y2;
+
     for(size_t i=0; i<m_aretes.size(); ++i)
     {
-        m_aretes[i]->afficherAreteSvg(svgout);
+                x1 = m_sommets[m_aretes[i]->get_Num1()]->getX();
+                y1 = m_sommets[m_aretes[i]->get_Num1()]->getY();
+
+                x2 = m_sommets[m_aretes[i]->get_Num2()]->getX();
+                y2 = m_sommets[m_aretes[i]->get_Num2()]->getY();
+
+        svgout->addLine(x1*100,y1*100,x2*100,y2*100,"black");
+        svgout->addText( ((x1*100)+(x2*100))/2 , ((y1*100)+(y2*100))/2 , m_aretes[i]->get_Poids() , "purple");
     }
 }
